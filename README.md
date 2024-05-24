@@ -13,9 +13,17 @@ ezgpt simplifies interaction with the GPT API, making it accessible for both dev
 
 ## Installation
 
+### With Pip:
+
+1.  ```bash
+    pip install git+https://github.com/olsonb97/ezgpt.git
+    ```
+
+### With Git:
+
 1. Clone the repository:
     ```bash
-    git clone https://github.com/yourusername/ezgpt.git
+    git clone https://github.com/olsonb97/ezgpt.git
     cd ezgpt
     ```
 
