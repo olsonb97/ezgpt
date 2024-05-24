@@ -30,12 +30,6 @@ cmd_dict = [
         "params": False
     },
     {
-        "description": "Clear Screen: clear all messages from the screen",
-        "syntax": r"\clear-screen",
-        "action": "_EZGPT__clear_screen_command",
-        "params": False
-    },
-    {
         "description": "Clear History: reset the message history; preserves system prompts",
         "syntax": r"\clear-history",
         "action": "_EZGPT__clear_history_command",
@@ -70,17 +64,5 @@ cmd_dict = [
         "syntax": r"\show-temperature",
         "action": "_EZGPT__show_temperature_command",
         "params": False
-    },
-    {
-        "description": "Set Name: set the name for the assistant by appending the name to this command",
-        "syntax": r"\set-name ",
-        "action": "_EZGPT__set_name_command",
-        "params": True
-    },
-    {
-        "description": "Reset Name: reset the name of the system",
-        "syntax": r"\reset-name",
-        "action": "_EZGPT__reset_name_command",
-        "params": False
-    },
+    }
 ]
