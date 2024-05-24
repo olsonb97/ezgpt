@@ -1,30 +1,94 @@
+from tkinter import filedialog, Tk
+import pickle
+import sys
+import os
+import colorama
 from ezgpt import EZGPT
 
-gpt = EZGPT(temperature=1.0, commands=True)
+def print_system(message):
+    print(f"{colorama.Fore.LIGHTMAGENTA_EX}{message}{colorama.Style.RESET_ALL}")
 
-def manual_convo():
+def save(ezgpt):
+    root = Tk()
+    root.withdraw()  # Hide the root window
+    filename = filedialog.asksaveasfilename(
+        defaultextension=".pkl",
+        filetypes=[("Pickle files", "*.pkl")],
+        title="Save CLI-GPT"
+    )
+    if filename:
+        with open(filename, 'wb') as f:
+            pickle.dump(ezgpt, f)
+        print_system(f"CLI-GPT saved to {filename}")
+
+def load():
+    root = Tk()
+    root.withdraw()  # Hide the root window
+    filename = filedialog.askopenfilename(
+        defaultextension=".pkl",
+        filetypes=[("Pickle files", "*.pkl")],
+        title="Load CLI-GPT"
+    )
+    if filename:
+        with open(filename, 'rb') as f:
+            return pickle.load(f)
+    print_system("No file selected or loading failed.")
+    return None
+
+def main_menu():
+    ezgpt = None
     while True:
-        user_message = input("You: ")
-        if cmd_return := gpt.send_msg(user_message):
-            print(cmd_return)
-            continue
-        gpt_message = gpt.get_msg()
-        print("GPT:", gpt_message)
+        print_system("\nMain Menu:\n")
+        print_system("    1. Chat")
+        print_system("    2. Set API Key")
+        print_system("    3. Load CLI-GPT")
+        print_system("    4. Save CLI-GPT")
+        print_system("    5. Exit\n")
+        choice = input("Choose an option: ").strip()
+        if choice == '1':
+            if ezgpt is None:
+                ezgpt = EZGPT(commands=True)
+            enter_chat(ezgpt)
+        elif choice == '2':
+            set_api_key()
+        elif choice == '3':
+            ezgpt = load()
+            if ezgpt:
+                print_system("CLI-GPT loaded successfully.")
+        elif choice == '4':
+            if ezgpt:
+                save(ezgpt)
+            else:
+                print_system("No active CLI-GPT instance to save.")
+        elif choice == '5':
+            sys.exit()
+        else:
+            print_system("\nInvalid choice. Please choose again.")
 
-def manual_stream():
-    while True:
-        user_message = input("You: ")
-        if cmd_return := gpt.send_msg(user_message):
-            print(cmd_return)
-            continue
-        print("GPT: ", end="", flush=True)
-        for chunk in gpt.stream_msg():
-            print(chunk, end="", flush=True)
-        print()
+def set_api_key():
+    try:
+        api_key = input("Enter your OpenAI API Key: ").strip()
+        if api_key:
+            os.environ['OPENAI_API_KEY'] = api_key
+            print_system("\nAPI Key set successfully.")
+        else:
+            print_system("\nAPI Key cannot be empty.")
+    except KeyboardInterrupt:
+        print_system("\nReturning to main menu...")
+    except Exception as e:
+        print_system(f"API Key error: {e}")
 
-def auto_convo():
-    gpt.conversation(stream=True, color=False)
+def enter_chat(ezgpt):
+    try:
+        ezgpt.conversation(stream=True, color=True)
+    except KeyboardInterrupt:
+        print_system("\nReturning to main menu...")
+    except Exception as e:
+        print_system(f"\nChat Error: {e}")
 
-auto_convo()
-# manual_convo()
-# manual_stream()
+if __name__ == "__main__":
+    try:
+        main_menu()
+    except KeyboardInterrupt:
+        print_system("\nProgram interrupted. Exiting...")
+        sys.exit()
