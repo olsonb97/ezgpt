@@ -3,7 +3,7 @@ import pickle
 import sys
 import os
 import colorama
-from ezgpt import EZGPT
+from src.ezgpt import EZGPT
 
 def print_system(message):
     print(f"{colorama.Fore.LIGHTMAGENTA_EX}{message}{colorama.Style.RESET_ALL}")
@@ -14,12 +14,12 @@ def save(ezgpt):
     filename = filedialog.asksaveasfilename(
         defaultextension=".pkl",
         filetypes=[("Pickle files", "*.pkl")],
-        title="Save CLI-GPT"
+        title="Save EZGPT"
     )
     if filename:
         with open(filename, 'wb') as f:
             pickle.dump(ezgpt, f)
-        print_system(f"CLI-GPT saved to {filename}")
+        print_system(f"EZGPT saved to {filename}")
 
 def load():
     root = Tk()
@@ -27,7 +27,7 @@ def load():
     filename = filedialog.askopenfilename(
         defaultextension=".pkl",
         filetypes=[("Pickle files", "*.pkl")],
-        title="Load CLI-GPT"
+        title="Load EZGPT"
     )
     if filename:
         with open(filename, 'rb') as f:
@@ -41,8 +41,8 @@ def main_menu():
         print_system("\nMain Menu:\n")
         print_system("    1. Chat")
         print_system("    2. Set API Key")
-        print_system("    3. Load CLI-GPT")
-        print_system("    4. Save CLI-GPT")
+        print_system("    3. Load EZGPT")
+        print_system("    4. Save EZGPT")
         print_system("    5. Exit\n")
         choice = input("Choose an option: ").strip()
         if choice == '1':
@@ -54,12 +54,12 @@ def main_menu():
         elif choice == '3':
             ezgpt = load()
             if ezgpt:
-                print_system("CLI-GPT loaded successfully.")
+                print_system("EZGPT loaded successfully.")
         elif choice == '4':
             if ezgpt:
                 save(ezgpt)
             else:
-                print_system("No active CLI-GPT instance to save.")
+                print_system("No active EZGPT instance to save.")
         elif choice == '5':
             sys.exit()
         else:
