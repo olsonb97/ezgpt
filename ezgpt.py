@@ -45,9 +45,13 @@ class EZGPT:
                 temperature=self.temperature,
                 stream=True
             )
+            message = ""
             for chunk in response:
                 if chunk.choices[0].delta.content is not None:
-                    yield chunk.choices[0].delta.content
+                    chunk_str = chunk.choices[0].delta.content
+                    message += chunk_str
+                    yield chunk_str
+            self.messages.append({"role": "assistant", "content": message})
         except Exception as e:
             raise ValueError(f"Error during streaming response: {e}")
 
@@ -84,8 +88,7 @@ class EZGPT:
                 print(gpt_color + f"{self.name}: ", end="", flush=True)
                 # Check if stream
                 if stream:
-                    response_generator = self.stream_msg()
-                    for part in response_generator:
+                    for part in self.stream_msg():
                         print(part, end="", flush=True)
                     print()
                 else:
