@@ -47,7 +47,7 @@ def main_menu():
         choice = input("Choose an option: ").strip()
         if choice == '1':
             if ezgpt is None:
-                ezgpt = EZGPT(commands=True)
+                ezgpt = EZGPT(commands=True, fresh=True)
             enter_chat(ezgpt)
         elif choice == '2':
             set_api_key()

@@ -2,7 +2,7 @@ import os
 from openai import OpenAI
 import colorama
 from colorama import Fore
-from commands import cmd_dict
+from .commands import cmd_dict
 
 class EZGPT:
     """
