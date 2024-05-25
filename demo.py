@@ -11,6 +11,7 @@ def print_system(message):
 def save(ezgpt):
     root = Tk()
     root.withdraw()  # Hide the root window
+    root.attributes('-topmost', True)
     filename = filedialog.asksaveasfilename(
         defaultextension=".pkl",
         filetypes=[("Pickle files", "*.pkl")],
@@ -24,6 +25,7 @@ def save(ezgpt):
 def load():
     root = Tk()
     root.withdraw()  # Hide the root window
+    root.attributes('-topmost', True)
     filename = filedialog.askopenfilename(
         defaultextension=".pkl",
         filetypes=[("Pickle files", "*.pkl")],
@@ -47,7 +49,7 @@ def main_menu():
         choice = input("Choose an option: ").strip()
         if choice == '1':
             if ezgpt is None:
-                ezgpt = EZGPT(commands=True, fresh=True)
+                ezgpt = EZGPT(commands=True, fresh=False)
             enter_chat(ezgpt)
         elif choice == '2':
             set_api_key()
