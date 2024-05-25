@@ -37,7 +37,7 @@ class EZGPT:
             self.commands = self.__initialize_commands()
         self.model = model
         self.temperature = temperature
-        self.client = self.__initialize_client()
+        self.client = self.initialize_client()
         self.messages = [None]
         self.system_prompts = []
         self.__set_system_init()
@@ -51,11 +51,11 @@ class EZGPT:
             command["action"] = getattr(self, command["action"])
         return commands
 
-    def __initialize_client(self):
-        """Initializes the OpenAI client."""
+    def initialize_client(self):
+        """Initializes the OpenAI client. (Uses env variable key)"""
         return OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
-    def send_msg(self, user_input):
+    def send_msg(self, user_input: str):
         """
         Sends a message to the GPT instance.
 
@@ -115,7 +115,7 @@ class EZGPT:
         except (IndexError, KeyError) as e:
             raise ValueError(f"Error extracting message from response: {e}")
         
-    def conversation(self, stream=False, color=True):
+    def conversation(self, stream: bool = False, color: bool = True):
         """
         Starts a conversation with the GPT instance in the terminal.
         Use the manual conversation methods for more control.
@@ -141,17 +141,20 @@ class EZGPT:
                 # Get response
                 print(gpt_color + f"{self.name}: ", end="", flush=True)
                 # Check if stream
-                if stream:
-                    for part in self.stream_msg():
-                        print(part, end="", flush=True)
+                try:
+                    if stream:
+                        for part in self.stream_msg():
+                            print(part, end="", flush=True)
+                        print()
+                    else:
+                        print(self.get_msg())
+                except KeyboardInterrupt:
                     print()
-                else:
-                    print(self.get_msg())
+                    continue
             except KeyboardInterrupt:
-                print()
-                continue
+                break
             except Exception as e:
-                print(sys_color + self.name + f"Error: {e}")
+                print(sys_color + self.name + f" Error: {e}")
 
     def __getstate__(self):
         """Excludes the client from being pickled."""
@@ -163,7 +166,7 @@ class EZGPT:
         """Restores the client after unpickling."""
         self.__dict__.update(state)
         try:
-            self.__dict__['client'] = self.__initialize_client()
+            self.__dict__['client'] = self.initialize_client()
         except Exception as e:
             raise RuntimeError(f"Failed to initialize client: {e}")
 
