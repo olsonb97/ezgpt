@@ -1,5 +1,7 @@
 # ezgpt
 
+**Note**: This project is distinct from any similarly named projects on other platforms.
+
 ezgpt simplifies interaction with the GPT API, as well as adds (optional) commands, making it accessible for both developers and non-developers. This project includes an executable release for those who may not be familiar with coding.
 
 ## Features
