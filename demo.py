@@ -38,6 +38,7 @@ def load():
     return None
 
 def main_menu():
+    global ezgpt
     ezgpt = None
     while True:
         print_system("\nMain Menu:\n")
@@ -68,11 +69,14 @@ def main_menu():
             print_system("\nInvalid choice. Please choose again.")
 
 def set_api_key():
+    global ezgpt
     try:
         api_key = input("Enter your OpenAI API Key: ").strip()
         if api_key:
             os.environ['OPENAI_API_KEY'] = api_key
             print_system("\nAPI Key set successfully.")
+            if ezgpt:
+                ezgpt.client = ezgpt.initialize_client()
         else:
             print_system("\nAPI Key cannot be empty.")
     except KeyboardInterrupt:
