@@ -198,23 +198,23 @@ class EZGPT:
                 return cmd_dict['action'](input)
         return ""
 
-    def __help_command(self):
+    def _EZGPT__help_command(self):
         """Returns the help text for available commands."""
         help_text = "\nAvailable Commands:\n"
         for command in self.commands:
             help_text += f"\n    {command['description']}\n        -   '{command['syntax'].strip()}'\n"
         return help_text
 
-    def __clear_history_command(self):
+    def _EZGPT__clear_history_command(self):
         """Clears the chat history while preserving system prompts."""
         self.messages = [message for message in self.messages if message['role'] == 'system']
         return f"{self.name}: Chat history cleared."
 
-    def __show_model_command(self):
+    def _EZGPT__show_model_command(self):
         """Returns the current model."""
         return f"{self.name} current model: '{self.model}'" 
 
-    def __set_model_command(self, input):
+    def _EZGPT__set_model_command(self, input):
         """Sets the model to the specified one if available."""
         test_model = input[11:]
         if test_model in self.available_models:
@@ -231,13 +231,13 @@ class EZGPT:
         else:
             return f"{self.name} model failed to update. Must be one of the following: {', '.join(self.available_models)}"
 
-    def __clear_prompts_command(self):
+    def _EZGPT__clear_prompts_command(self):
         """Clears all system prompts."""
         self.messages = [self.messages[0]] + [msg for msg in self.messages if msg['role'] != 'system']
         self.system_prompts = []
         return (f"{self.name} prompts reset.")
 
-    def __add_prompt_command(self, input):
+    def _EZGPT__add_prompt_command(self, input):
         """Adds a new system prompt."""
         new_prompt = input[12:]
         new_msg = {"role": "system", "content": new_prompt}
@@ -245,13 +245,13 @@ class EZGPT:
         self.system_prompts.append(new_msg)
         return f"{self.name} prompt added: '{new_prompt}'"
 
-    def __show_prompts_command(self):
+    def _EZGPT__show_prompts_command(self):
         """Shows all active system prompts."""
         prompts_strings = [f"{i+1}. {message['content']}" for i, message in enumerate(self.system_prompts)]
         formatted_prompts = '\n'.join(prompts_strings)
         return f"{self.name} Prompts:{'\n' if formatted_prompts else ''}{formatted_prompts}"
 
-    def __delete_prompt_command(self, input):
+    def _EZGPT__delete_prompt_command(self, input):
         """Deletes a specified system prompt."""
         num = input[15:]
         if num.isdigit():
@@ -266,7 +266,7 @@ class EZGPT:
         else:
             return f"Invalid input: '{num}'. Please provide a numeric value."
 
-    def __set_temperature_command(self, input):
+    def _EZGPT__set_temperature_command(self, input):
         """Sets the temperature for the GPT model."""
         try:
             temperature = float(input[17:])
@@ -278,11 +278,11 @@ class EZGPT:
         except ValueError:
             return f"{self.name}: Temperature must be a valid number"
 
-    def __reset_temperature_command(self):
+    def _EZGPT__reset_temperature_command(self):
         """Resets the temperature to the default value."""
         self.temperature = 1.0
         return f"{self.name}: Temperature set to {self.temperature}"
 
-    def __show_temperature_command(self):
+    def _EZGPT__show_temperature_command(self):
         """Shows the current temperature setting."""
         return f"{self.name}: Temperature is set to {self.temperature}"
